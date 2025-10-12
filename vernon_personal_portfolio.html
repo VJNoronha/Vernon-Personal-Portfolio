@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vernon Noronha | Software Engineer</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #6366f1;
+            --secondary: #8b5cf6;
+            --accent: #ec4899;
+            --dark: #0f172a;
+            --light: #f8fafc;
+            --gray: #64748b;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: var(--dark);
+            color: var(--light);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Animated Background */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+        }
+
+        .bg-animation::before {
+            content: '';
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.15) 0%, transparent 70%);
+            top: -250px;
+            right: -250px;
+            animation: float 20s ease-in-out infinite;
+        }
+
+        .bg-animation::after {
+            content: '';
+            position: absolute;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(139, 92, 246, 0.12) 0%, transparent 70%);
+            bottom: -200px;
+            left: -200px;
+            animation: float 15s ease-in-out infinite reverse;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            33% { transform: translate(100px, -50px) rotate(120deg); }
+            66% { transform: translate(-50px, 100px) rotate(240deg); }
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 1.5rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+            background: rgba(15, 23, 42, 0.8);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--light);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary);
+            transition: width 0.3s;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 0 5%;
+            position: relative;
+        }
+
+        .hero-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .greeting {
+            font-size: 1.2rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+            opacity: 0;
+            animation: fadeInUp 0.8s ease forwards;
+        }
+
+        .hero h1 {
+            font-size: clamp(2.5rem, 6vw, 5rem);
+            font-weight: 800;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #fff 0%, var(--primary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            opacity: 0;
+            animation: fadeInUp 0.8s ease 0.2s forwards;
+        }
+
+        .hero h2 {
+            font-size: clamp(1.5rem, 3vw, 2.5rem);
+            color: var(--gray);
+            margin-bottom: 2rem;
+            opacity: 0;
+            animation: fadeInUp 0.8s ease 0.4s forwards;
+        }
+
+        .hero p {
+            font-size: 1.1rem;
+            color: var(--gray);
+            max-width: 600px;
+            margin-bottom: 2.5rem;
+            line-height: 1.8;
+            opacity: 0;
+            animation: fadeInUp 0.8s ease 0.6s forwards;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+            opacity: 0;
+            animation: fadeInUp 0.8s ease 0.8s forwards;
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(99, 102, 241, 0.4);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: var(--primary);
+        }
+
+        /* Skills Section */
+        .section {
+            padding: 5rem 5%;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            text-align: center;
+            background: linear-gradient(135deg, #fff 0%, var(--primary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            color: var(--gray);
+            margin-bottom: 4rem;
+            font-size: 1.1rem;
+        }
+
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .skill-card {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 2rem;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s;
+            backdrop-filter: blur(10px);
+        }
+
+        .skill-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--primary);
+            box-shadow: 0 20px 40px rgba(99, 102, 241, 0.2);
+        }
+
+        .skill-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+        }
+
+        .skill-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .tag {
+            background: rgba(99, 102, 241, 0.2);
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            color: var(--primary);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+        }
+
+        /* Projects Grid */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .project-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s;
+            backdrop-filter: blur(10px);
+        }
+
+        .project-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--primary);
+            box-shadow: 0 20px 40px rgba(99, 102, 241, 0.2);
+        }
+
+        .project-header {
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.03);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .project-header h3 {
+            font-size: 1.3rem;
+            margin-bottom: 0.8rem;
+        }
+
+        .project-header p {
+            color: var(--gray);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .project-content {
+            padding: 2rem;
+        }
+
+        .project-content p {
+            color: var(--gray);
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Experience Section */
+        .experience-card {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 2.5rem;
+            border-radius: 20px;
+            border-left: 4px solid var(--primary);
+            margin-bottom: 2rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .experience-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .experience-title {
+            font-size: 1.5rem;
+            color: var(--primary);
+        }
+
+        .experience-date {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        .experience-card ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .experience-card li {
+            padding-left: 1.5rem;
+            margin-bottom: 0.8rem;
+            position: relative;
+            color: var(--gray);
+        }
+
+        .experience-card li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: var(--primary);
+        }
+
+        /* Contact Section */
+        .contact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .contact-card {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 2rem;
+            border-radius: 20px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        .contact-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary);
+            background: rgba(99, 102, 241, 0.1);
+        }
+
+        .contact-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            font-size: 1.5rem;
+        }
+
+        .contact-card h3 {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .contact-card p {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 3rem 5%;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--gray);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                gap: 1rem;
+                font-size: 0.9rem;
+            }
+
+            .hero {
+                padding-top: 80px;
+            }
+
+            .projects-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .skills-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-animation"></div>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="logo">VN</div>
+        <ul class="nav-links">
+            <li><a href="#about">About</a></li>
+            <li><a href="#skills">Skills</a></li>
+            <li><a href="#projects">Projects</a></li>
+            <li><a href="#experience">Experience</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="about">
+        <div class="hero-content">
+            <div class="greeting">Hello, I'm</div>
+            <h1>Vernon John Noronha</h1>
+            <h2>Software Engineer & AI Enthusiast</h2>
+            <p>
+                Computer Science graduate from Manipal Institute of Technology (July 2025) 
+                with a passion for building innovative solutions. Experienced in full-stack 
+                development, AI/ML, and cloud technologies.
+            </p>
+
+        </div>
+        <div class="scroll-indicator">
+            <span></span>
+        </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section class="section" id="skills">
+        <h2 class="section-title">Technical Expertise</h2>
+        
+        <div class="skills-grid">
+            <div class="skill-card">
+                <h3>Languages</h3>
+                <div class="skill-tags">
+                    <span class="tag">C</span>
+                    <span class="tag">C++</span>
+                    <span class="tag">Java</span>
+                    <span class="tag">Python</span>
+                    <span class="tag">JavaScript</span>
+                    <span class="tag">MySQL</span>
+                </div>
+            </div>
+
+            <div class="skill-card">
+                <h3>Frontend Development</h3>
+                <div class="skill-tags">
+                    <span class="tag">HTML/CSS</span>
+                    <span class="tag">React.js</span>
+                    <span class="tag">Angular</span>
+                    <span class="tag">Vue.js</span>
+                    <span class="tag">JavaScript</span>
+                </div>
+            </div>
+
+            <div class="skill-card">
+                <h3>Backend Development</h3>
+                <div class="skill-tags">
+                    <span class="tag">Node.js</span>
+                    <span class="tag">Django</span>
+                    <span class="tag">Flask</span>
+                    <span class="tag">Spring Boot</span>
+                </div>
+            </div>
+
+            <div class="skill-card">
+                <h3>AI/ML</h3>
+                <div class="skill-tags">
+                    <span class="tag">Python</span>
+                    <span class="tag">NumPy</span>
+                    <span class="tag">Pandas</span>
+                    <span class="tag">scikit-learn</span>
+                    <span class="tag">TensorFlow</span>
+                    <span class="tag">YOLO</span>
+                </div>
+            </div>
+
+            <div class="skill-card">
+                <h3>Cloud & DevOps</h3>
+                <div class="skill-tags">
+                    <span class="tag">AWS Lambda</span>
+                    <span class="tag">S3</span>
+                    <span class="tag">EC2</span>
+                    <span class="tag">Serverless</span>
+                </div>
+            </div>
+
+            <div class="skill-card">
+                <h3>Tools & Algorithms</h3>
+                <div class="skill-tags">
+                    <span class="tag">Git</span>
+                    <span class="tag">VS Code</span>
+                    <span class="tag">Linux</span>
+                    <span class="tag">Jupyter</span>
+                    <span class="tag">DSA</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section class="section" id="projects">
+        <h2 class="section-title">Featured Projects</h2>
+        
+        <div class="projects-grid">
+            <div class="project-card">
+                <div class="project-header">
+                    <h3>Task Scheduling in Distributed Systems</h3>
+                    <p>Designed and implemented scheduling algorithms to optimize resource allocation and improve overall system efficiency. Demonstrated improved throughput and reduced task completion times in simulated distributed environments.</p>
+                </div>
+                <div class="project-content">
+                    <div class="skill-tags">
+                        <span class="tag">Python</span>
+                        <span class="tag">Algorithms</span>
+                        <span class="tag">Optimization</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="project-card">
+                <div class="project-header">
+                    <h3>Face Recognition using Deep Learning</h3>
+                    <p>Built a deep learning model for accurate and robust face recognition across varied datasets. Achieved high recognition rates by leveraging convolutional neural networks and advanced feature extraction techniques.</p>
+                </div>
+                <div class="project-content">
+                    <div class="skill-tags">
+                        <span class="tag">Deep Learning</span>
+                        <span class="tag">CNN</span>
+                        <span class="tag">Python</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="project-card">
+                <div class="project-header">
+                    <h3>Car Detection with YOLO</h3>
+                    <p>Built a real-time car detection system leveraging the YOLO architecture for high-speed object detection. Evaluated performance on live video streams, ensuring accurate detection with minimal latency.</p>
+                </div>
+                <div class="project-content">
+                    <div class="skill-tags">
+                        <span class="tag">YOLO</span>
+                        <span class="tag">Computer Vision</span>
+                        <span class="tag">Real-time</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="project-card">
+                <div class="project-header">
+                    <h3>IPv6 to IPv4 Bridge using DNS64 & NAT64</h3>
+                    <p>Developed a network bridge to enable seamless communication between IPv6 and IPv4 systems. Ensured compatibility and reliability by simulating real-world network traffic scenarios.</p>
+                </div>
+                <div class="project-content">
+                    <div class="skill-tags">
+                        <span class="tag">Networking</span>
+                        <span class="tag">DNS64</span>
+                        <span class="tag">NAT64</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="project-card">
+                <div class="project-header">
+                    <h3>Art Generation using Neural Style Transfer</h3>
+                    <p>Developed a neural network to generate artistic images by blending content with stylistic features. Produced visually compelling results by experimenting with different style-content pairings.</p>
+                </div>
+                <div class="project-content">
+                    <div class="skill-tags">
+                        <span class="tag">Neural Networks</span>
+                        <span class="tag">Style Transfer</span>
+                        <span class="tag">AI Art</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="project-card">
+                <div class="project-header">
+                    <h3>Classification of Pet's Faces</h3>
+                    <p>Trained a classification model to identify and distinguish between different pet faces with high accuracy. Improved model generalization using data augmentation techniques.</p>
+                </div>
+                <div class="project-content">
+                    <div class="skill-tags">
+                        <span class="tag">TensorFlow</span>
+                        <span class="tag">Classification</span>
+                        <span class="tag">ML</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="project-card">
+                <div class="project-header">
+                    <h3>Object Detection using TensorFlow</h3>
+                    <p>Applied machine learning models with TensorFlow to detect and classify multiple object categories. Enhanced model precision through fine-tuning and hyper-parameter optimization.</p>
+                </div>
+                <div class="project-content">
+                    <div class="skill-tags">
+                        <span class="tag">TensorFlow</span>
+                        <span class="tag">Object Detection</span>
+                        <span class="tag">ML</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="project-card">
+                <div class="project-header">
+                    <h3>Landmark Detection</h3>
+                    <p>Created a detection model to recognize and localize diverse landmarks in images. Designed and tested the model to handle variations in scale, lighting, and perspective.</p>
+                </div>
+                <div class="project-content">
+                    <div class="skill-tags">
+                        <span class="tag">Computer Vision</span>
+                        <span class="tag">Detection</span>
+                        <span class="tag">Python</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="project-card">
+                <div class="project-header">
+                    <h3>Simulating Laplacian Filter for Edge Detection</h3>
+                    <p>Implemented Laplacian filtering algorithms to enhance edge detection for computer vision tasks. Validated the approach through experiments on image datasets to highlight key object boundaries.</p>
+                </div>
+                <div class="project-content">
+                    <div class="skill-tags">
+                        <span class="tag">Image Processing</span>
+                        <span class="tag">Computer Vision</span>
+                        <span class="tag">Algorithms</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Experience Section -->
+    <section class="section" id="experience">
+        <h2 class="section-title">Professional Experience</h2>
+        
+        <div class="experience-card">
+            <div class="experience-header">
+                <div>
+                    <div class="experience-title">Software Engineering Intern</div>
+                    <div style="color: var(--gray); margin-top: 0.5rem;">
+                        Etisalcom Bahrain Company W.L.L. • Bahrain
+                    </div>
+                </div>
+                <div class="experience-date">May 2024 - June 2024</div>
+            </div>
+            <ul>
+                <li>Shadowed daily activities of office staff to gain understanding of scope of work and software development lifecycle</li>
+                <li>Collaborated with cross-functional teams to identify system requirements, improving software functionality and user experience</li>
+                <li>Participated in continuous learning initiatives to stay abreast of emerging technologies and methodologies in software engineering</li>
+                <li>Coded software updates to add new features, close security holes and resolve defects</li>
+                <li>Partnered with engineering staff on identifying and resolving interface issues</li>
+            </ul>
+        </div>
+
+        <div class="experience-card">
+            <div class="experience-header">
+                <div>
+                    <div class="experience-title">Computer Science Student</div>
+                    <div style="color: var(--gray); margin-top: 0.5rem;">
+                        Manipal Institute of Technology
+                    </div>
+                </div>
+                <div class="experience-date">Expected July 2025</div>
+            </div>
+            <ul>
+                <li>Bachelor of Engineering in Computer Science with focus on AI/ML, distributed systems, and full-stack development</li>
+                <li>Completed multiple projects spanning computer vision, deep learning, networking, and algorithm optimization</li>
+                <li>Developed strong foundation in data structures, algorithms, and software engineering principles</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="section" id="contact">
+        <h2 class="section-title">Let's Connect</h2>
+        
+        <div class="contact-grid">
+            <a href="mailto:vern.noronha@gmail.com" class="contact-card">
+                <div class="contact-icon">📧</div>
+                <h3>Email</h3>
+                <p>vern.noronha@gmail.com</p>
+            </a>
+
+            <a href="tel:+919740952430" class="contact-card">
+                <div class="contact-icon">📱</div>
+                <h3>Phone</h3>
+                <p>+91 97409 52430</p>
+            </a>
+
+            <a href="https://linkedin.com/in/vernon-noronha" class="contact-card" target="_blank">
+                <div class="contact-icon">💼</div>
+                <h3>LinkedIn</h3>
+                <p>Connect with me</p>
+            </a>
+
+            <a href="https://github.com/vernon-noronha" class="contact-card" target="_blank">
+                <div class="contact-icon">💻</div>
+                <h3>GitHub</h3>
+                <p>View my code</p>
+            </a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+    </footer>
+
+    <script>
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Intersection Observer for scroll animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Observe all cards and sections
+        document.querySelectorAll('.skill-card, .project-card, .experience-card').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(50px)';
+            el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(el);
+        });
+
+        // Add active state to nav on scroll
+        window.addEventListener('scroll', () => {
+            let current = '';
+            document.querySelectorAll('section').forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (scrollY >= (sectionTop - 200)) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            document.querySelectorAll('.nav-links a').forEach(link => {
+                link.style.color = '';
+                if (link.getAttribute('href').slice(1) === current) {
+                    link.style.color = 'var(--primary)';
+                }
+            });
+        });
+
+        // Parallax effect on scroll
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const parallaxElements = document.querySelectorAll('.hero-content');
+            parallaxElements.forEach(el => {
+                el.style.transform = `translateY(${scrolled * 0.3}px)`;
+            });
+        });
+    </script>
+</body>
+</html>
